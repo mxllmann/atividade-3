@@ -16,7 +16,7 @@ const channelWrapper = connection.createChannel({
   setup: (channel) => {
     // assertQueue: cria a fila se nao existir, ou confirma que existe com essas opcoes.
     // durable: false -> definicao da fila some se o broker reiniciar.
-    return channel.assertQueue(QUEUE, { durable: false });
+    return channel.assertQueue(QUEUE, { durable: true });
   },
 });
 

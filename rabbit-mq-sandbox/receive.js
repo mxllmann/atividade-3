@@ -13,7 +13,7 @@ const channelWrapper = connection.createChannel({
   setup: (channel) => {
     // Importante: mesmas opcoes do send. Se divergir, assertQueue falha.
     return Promise.all([
-      channel.assertQueue(QUEUE, { durable: false }),
+      channel.assertQueue(QUEUE, { durable: true }),
 
       // consume escuta a fila. O handler eh chamado pra cada mensagem entregue.
       channel.consume(QUEUE, (msg) => {
