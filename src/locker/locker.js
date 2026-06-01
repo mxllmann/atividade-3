@@ -9,7 +9,7 @@ app.use(express.json());
 
 locker.init(LockerModel);
 
-app.post('/lockers', async (req, res) => {
+app.post('/locker', async (req, res) => {
   try {
     const result = await locker.create(req.body);
     res.status(201).json(result);
@@ -18,12 +18,12 @@ app.post('/lockers', async (req, res) => {
   }
 });
 
-app.get('/lockers', async (_req, res) => {
+app.get('/locker/all', async (_req, res) => {
   const result = await locker.findAll();
   res.json(result);
 });
 
-app.get('/lockers/:id', async (req, res) => {
+app.get('/locker/:id', async (req, res) => {
   try {
     const result = await locker.findById(req.params.id);
     if (!result) return res.status(404).json({ error: 'Locker não encontrado' });
@@ -33,7 +33,7 @@ app.get('/lockers/:id', async (req, res) => {
   }
 });
 
-app.put('/lockers/:id', async (req, res) => {
+app.put('/locker/:id', async (req, res) => {
   try {
     const result = await locker.update(req.params.id, req.body);
     if (!result) return res.status(404).json({ error: 'Locker não encontrado' });
@@ -43,7 +43,7 @@ app.put('/lockers/:id', async (req, res) => {
   }
 });
 
-app.delete('/lockers/:id', async (req, res) => {
+app.delete('/locker/:id', async (req, res) => {
   try {
     const result = await locker.remove(req.params.id);
     if (!result) return res.status(404).json({ error: 'Locker não encontrado' });
