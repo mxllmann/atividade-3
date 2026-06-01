@@ -22,8 +22,20 @@ async function occupy(id) {
   return Locker.findByIdAndUpdate(id, { status: 'occupied' }, { new: true });
 }
 
+async function update(id, data) {
+  return Locker.findByIdAndUpdate(id, data, { new: true });
+}
+
+async function remove(id) {
+  return Locker.findByIdAndDelete(id);
+}
+
+async function occupy(id) {
+  return Locker.findByIdAndUpdate(id, { status: 'occupied' }, { new: true });
+}
+
 async function release(id) {
   return Locker.findByIdAndUpdate(id, { status: 'empty' }, { new: true });
 }
 
-module.exports = { lockerSchema, init, create, findAll, findById, occupy, release };
+module.exports = { lockerSchema, init, create, findAll, findById, update, remove, occupy, release };
