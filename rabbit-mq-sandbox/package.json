@@ -1,0 +1,13 @@
+{
+  "name": "rabbit-mq-sandbox",
+  "version": "1.0.0",
+  "description": "Sandbox de aprendizado de RabbitMQ - Modulo 1: Hello World",
+  "scripts": {
+    "send": "node send.js",
+    "receive": "node receive.js"
+  },
+  "dependencies": {
+    "amqp-connection-manager": "^4.1.14",
+    "amqplib": "^0.10.3"
+  }
+}

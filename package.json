@@ -1,0 +1,14 @@
+{
+  "name": "atividade-3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": ""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amqp-connection-manager": "^5.0.0"
+  }
+}
