@@ -26,8 +26,8 @@ app.get('/locker/all', async (_req, res) => {
 
 app.get('/locker/available/:capacity', async (req, res) => {
   try {
-    const result = await locker.findAvailable(req.params.capacity);
-    console.log(`\n[Locker] 🔍 Busca por lockers disponíveis tamanho ${req.params.capacity} → ${result.length} encontrado(s)`);
+    const result = await locker.findAvailable(req.params.capacity, req.query.condominium);
+    console.log(`\n[Locker] 🔍 Busca por lockers disponíveis tamanho ${req.params.capacity}${req.query.condominium ? ` cond. ${req.query.condominium}` : ''} → ${result.length} encontrado(s)`);
     res.json(result);
   } catch (err) {
     res.status(400).json({ error: err.message });

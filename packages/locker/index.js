@@ -34,8 +34,10 @@ async function release(sequenceId) {
   return Locker.findOneAndUpdate({ sequenceId }, { status: 'empty' }, { returnDocument: 'after' });
 }
 
-async function findAvailable(capacity) {
-  return Locker.find({ capacity, status: 'empty' });
+async function findAvailable(capacity, condominium) {
+  const query = { capacity, status: 'empty' };
+  if (condominium) query.condominium = condominium;
+  return Locker.find(query);
 }
 
 module.exports = { lockerSchema, init, create, findAll, findBySequenceId, update, remove, occupy, release, findAvailable };

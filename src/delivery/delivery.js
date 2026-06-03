@@ -14,57 +14,47 @@ app.use(express.json());
 
 delivery.init(DeliveryModel);
 
-// Criar entrega (entregador deposita encomenda)
+// Criar entrega (entregador escolhe tamanho e residente)
 app.post('/delivery', async (req, res) => {
   try {
-    const { lockerId, residentId, size } = req.body;
+    const { sequenceId, residentId, size } = req.body;
 
     if (!size) return res.status(400).json({ error: 'Tamanho da encomenda é obrigatório (P, M, G, XG)' });
+    if (!residentId) return res.status(400).json({ error: 'Residente é obrigatório' });
 
-    const [lockerRes, residentRes] = await Promise.all([
-      fetch(`${LOCKER_SERVICE_URL}/locker/${lockerId}`),
-      fetch(`${RESIDENT_SERVICE_URL}/resident/${residentId}`),
-    ]);
-
-    if (!lockerRes.ok) return res.status(404).json({ error: 'Locker não encontrado' });
+    // Busca residente para saber o condomínio
+    const residentRes = await fetch(`${RESIDENT_SERVICE_URL}/resident/${residentId}`);
     if (!residentRes.ok) return res.status(404).json({ error: 'Residente não encontrado' });
-
-    const locker = await lockerRes.json();
     const resident = await residentRes.json();
 
-    if (locker.condominium !== resident.condominium) {
-      console.log(`\n[Delivery] ❌ Entrega recusada! Residente #${residentId} (cond. ${resident.condominium}) ≠ Locker #${lockerId} (cond. ${locker.condominium})`);
-      return res.status(400).json({ error: 'Residente não pertence ao condomínio deste locker' });
+    // Busca locker disponível do tamanho escolhido no condomínio do residente
+    const availableRes = await fetch(`${LOCKER_SERVICE_URL}/locker/available/${size}?condominium=${resident.condominium}`);
+    const available = await availableRes.json();
+
+    if (!available.length) {
+      console.log(`\n[Delivery] ❌ Entrega recusada! Nenhum locker ${size} disponível no condomínio ${resident.condominium}`);
+      return res.status(400).json({ error: `Nenhum locker tamanho ${size} disponível no condomínio ${resident.condominium}` });
     }
 
-    if (locker.status === 'occupied') {
-      console.log(`\n[Delivery] ❌ Entrega recusada! Locker #${lockerId} já está ocupado`);
-      return res.status(400).json({ error: 'Locker já está ocupado' });
-    }
+    const locker = available[0];
 
-    const sizeOrder = ['P', 'M', 'G', 'XG'];
-    if (sizeOrder.indexOf(size) > sizeOrder.indexOf(locker.capacity)) {
-      console.log(`\n[Delivery] ❌ Entrega recusada! Encomenda ${size} não cabe no locker ${locker.capacity}`);
-      return res.status(400).json({ error: `Encomenda tamanho ${size} não cabe no locker tamanho ${locker.capacity}` });
-    }
-
-    const result = await delivery.create(req.body);
+    const result = await delivery.create({ sequenceId, residentId, size, lockerId: locker.sequenceId });
 
     console.log(`\n[Delivery] 📬 Nova entrega criada!`);
     console.log(`[Delivery]    ├── Entrega #${result.sequenceId}`);
-    console.log(`[Delivery]    ├── Locker #${result.lockerId} (${locker.capacity}) ← Encomenda (${size})`);
+    console.log(`[Delivery]    ├── Locker #${locker.sequenceId} (${locker.capacity}) ← Encomenda (${size})`);
     console.log(`[Delivery]    ├── Residente #${result.residentId} (${resident.name})`);
-    console.log(`[Delivery]    └── Condomínio ${locker.condominium}`);
+    console.log(`[Delivery]    └── Condomínio ${resident.condominium}`);
 
     await publish(LOCKER_CONTROL, {
-      lockerId: result.lockerId,
+      lockerId: locker.sequenceId,
       deliveryId: result.sequenceId,
       action: 'occupy',
     });
 
     await publish(LOGGER_LOG, {
       deliveryId: result.sequenceId,
-      lockerId: result.lockerId,
+      lockerId: locker.sequenceId,
       residentId: result.residentId,
       status: 'Delivered',
     });
