@@ -17,7 +17,9 @@ delivery.init(DeliveryModel);
 // Criar entrega (entregador deposita encomenda)
 app.post('/delivery', async (req, res) => {
   try {
-    const { lockerId, residentId } = req.body;
+    const { lockerId, residentId, size } = req.body;
+
+    if (!size) return res.status(400).json({ error: 'Tamanho da encomenda é obrigatório (P, M, G, XG)' });
 
     const [lockerRes, residentRes] = await Promise.all([
       fetch(`${LOCKER_SERVICE_URL}/locker/${lockerId}`),
@@ -40,11 +42,17 @@ app.post('/delivery', async (req, res) => {
       return res.status(400).json({ error: 'Locker já está ocupado' });
     }
 
+    const sizeOrder = ['P', 'M', 'G', 'XG'];
+    if (sizeOrder.indexOf(size) > sizeOrder.indexOf(locker.capacity)) {
+      console.log(`\n[Delivery] ❌ Entrega recusada! Encomenda ${size} não cabe no locker ${locker.capacity}`);
+      return res.status(400).json({ error: `Encomenda tamanho ${size} não cabe no locker tamanho ${locker.capacity}` });
+    }
+
     const result = await delivery.create(req.body);
 
     console.log(`\n[Delivery] 📬 Nova entrega criada!`);
     console.log(`[Delivery]    ├── Entrega #${result.sequenceId}`);
-    console.log(`[Delivery]    ├── Locker #${result.lockerId} (${locker.capacity})`);
+    console.log(`[Delivery]    ├── Locker #${result.lockerId} (${locker.capacity}) ← Encomenda (${size})`);
     console.log(`[Delivery]    ├── Residente #${result.residentId} (${resident.name})`);
     console.log(`[Delivery]    └── Condomínio ${locker.condominium}`);
 

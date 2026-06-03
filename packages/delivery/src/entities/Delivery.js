@@ -14,6 +14,11 @@ const deliverySchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  size: {
+    type: String,
+    enum: ['P', 'M', 'G', 'XG'],
+    required: true,
+  },
   status: {
     type: String,
     enum: ['delivered', 'withdrawn'],
