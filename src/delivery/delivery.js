@@ -66,7 +66,7 @@ app.post('/delivery', async (req, res) => {
 });
 
 // Retirar encomenda (residente busca)
-app.put('/delivery/:sequenceId/withdraw', async (req, res) => {
+app.post('/delivery/:sequenceId/withdraw', async (req, res) => {
   try {
     const existing = await delivery.findBySequenceId(req.params.sequenceId);
     if (!existing) return res.status(404).json({ error: 'Delivery não encontrado' });
