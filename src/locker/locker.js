@@ -12,6 +12,7 @@ locker.init(LockerModel);
 app.post('/locker', async (req, res) => {
   try {
     const result = await locker.create(req.body);
+    console.log(`\n[Locker] 📦 Locker #${result.sequenceId} criado | Condomínio: ${result.condominium} | Tamanho: ${result.capacity}`);
     res.status(201).json(result);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -26,15 +27,16 @@ app.get('/locker/all', async (_req, res) => {
 app.get('/locker/available/:capacity', async (req, res) => {
   try {
     const result = await locker.findAvailable(req.params.capacity);
+    console.log(`\n[Locker] 🔍 Busca por lockers disponíveis tamanho ${req.params.capacity} → ${result.length} encontrado(s)`);
     res.json(result);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
 
-app.get('/locker/:id', async (req, res) => {
+app.get('/locker/:sequenceId', async (req, res) => {
   try {
-    const result = await locker.findById(req.params.id);
+    const result = await locker.findBySequenceId(req.params.sequenceId);
     if (!result) return res.status(404).json({ error: 'Locker não encontrado' });
     res.json(result);
   } catch (err) {
@@ -42,20 +44,22 @@ app.get('/locker/:id', async (req, res) => {
   }
 });
 
-app.put('/locker/:id', async (req, res) => {
+app.put('/locker/:sequenceId', async (req, res) => {
   try {
-    const result = await locker.update(req.params.id, req.body);
+    const result = await locker.update(req.params.sequenceId, req.body);
     if (!result) return res.status(404).json({ error: 'Locker não encontrado' });
+    console.log(`\n[Locker] ✏️  Locker #${req.params.sequenceId} atualizado → status: ${result.status}`);
     res.json(result);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
 
-app.delete('/locker/:id', async (req, res) => {
+app.delete('/locker/:sequenceId', async (req, res) => {
   try {
-    const result = await locker.remove(req.params.id);
+    const result = await locker.remove(req.params.sequenceId);
     if (!result) return res.status(404).json({ error: 'Locker não encontrado' });
+    console.log(`\n[Locker] 🗑️  Locker #${req.params.sequenceId} removido`);
     res.json({ message: 'Locker removido' });
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -63,5 +67,5 @@ app.delete('/locker/:id', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`[Locker Service] Rodando na porta ${PORT}`);
+  console.log(`\n📦 [Locker Service] Rodando na porta ${PORT}`);
 });

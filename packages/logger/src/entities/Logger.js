@@ -2,15 +2,15 @@ const mongoose = require('mongoose');
 
 const loggerSchema = new mongoose.Schema({
   deliveryId: {
-    type: String,
+    type: Number,
     required: true,
   },
   lockerId: {
-    type: String,
+    type: Number,
     required: true,
   },
   residentId: {
-    type: String,
+    type: Number,
     required: true,
   },
   status: {

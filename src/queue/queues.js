@@ -1,4 +1,4 @@
 module.exports = {
-  LOCKER_OPEN: 'locker.open',
+  LOCKER_CONTROL: 'locker.control',
   LOGGER_LOG: 'logger.log',
 };

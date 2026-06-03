@@ -14,7 +14,11 @@ logger.init(LoggerModel);
 // Consome mensagens da fila de logging
 consume(LOGGER_LOG, async (data) => {
   await logger.create(data);
-  console.log(`[Logger] Log registrado:`, data);
+  console.log(`\n[Logger] 📝 Log registrado!`);
+  console.log(`[Logger]    ├── Entrega #${data.deliveryId}`);
+  console.log(`[Logger]    ├── Locker #${data.lockerId}`);
+  console.log(`[Logger]    ├── Residente #${data.residentId}`);
+  console.log(`[Logger]    └── Status: ${data.status}`);
 });
 
 app.post('/log', async (req, res) => {
@@ -31,29 +35,20 @@ app.get('/log/all', async (_req, res) => {
   res.json(result);
 });
 
-app.get('/log/:id', async (req, res) => {
-  try {
-    const result = await logger.findById(req.params.id);
-    if (!result) return res.status(404).json({ error: 'Log não encontrado' });
-    res.json(result);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
-
 app.get('/log/delivery/:deliveryId', async (req, res) => {
   try {
-    const result = await logger.findByDeliveryId(req.params.deliveryId);
+    const result = await logger.findByDeliveryId(Number(req.params.deliveryId));
     res.json(result);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
 
-app.delete('/log/:id', async (req, res) => {
+app.delete('/log/:deliveryId', async (req, res) => {
   try {
-    const result = await logger.remove(req.params.id);
+    const result = await logger.remove(Number(req.params.deliveryId));
     if (!result) return res.status(404).json({ error: 'Log não encontrado' });
+    console.log(`\n[Logger] 🗑️  Log da entrega #${req.params.deliveryId} removido`);
     res.json({ message: 'Log removido' });
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -61,5 +56,5 @@ app.delete('/log/:id', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`[Logger Service] Rodando na porta ${PORT}`);
+  console.log(`\n📝 [Logger Service] Rodando na porta ${PORT}`);
 });

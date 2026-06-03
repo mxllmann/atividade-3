@@ -12,7 +12,7 @@ function consume(queue, handler) {
             await handler(data);
             channel.ack(msg);
           } catch (err) {
-            console.error(`[RabbitMQ] Erro ao processar mensagem de ${queue}:`, err.message);
+            console.error(`\n❗ Erro ao processar mensagem da fila "${queue}": ${err.message}`);
             channel.nack(msg, false, false);
           }
         });

@@ -7,11 +7,11 @@ const deliverySchema = new mongoose.Schema({
     unique: true,
   },
   residentId: {
-    type: String,
+    type: Number,
     required: true,
   },
   lockerId: {
-    type: String,
+    type: Number,
     required: true,
   },
   status: {

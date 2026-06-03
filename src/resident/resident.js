@@ -12,6 +12,7 @@ resident.init(ResidentModel);
 app.post('/resident', async (req, res) => {
   try {
     const result = await resident.create(req.body);
+    console.log(`\n[Resident] 👤 Residente #${result.sequenceId} cadastrado | ${result.name} | Condomínio ${result.condominium}`);
     res.status(201).json(result);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -23,9 +24,9 @@ app.get('/resident/all', async (_req, res) => {
   res.json(result);
 });
 
-app.get('/resident/:id', async (req, res) => {
+app.get('/resident/:sequenceId', async (req, res) => {
   try {
-    const result = await resident.findById(req.params.id);
+    const result = await resident.findBySequenceId(req.params.sequenceId);
     if (!result) return res.status(404).json({ error: 'Residente não encontrado' });
     res.json(result);
   } catch (err) {
@@ -33,20 +34,22 @@ app.get('/resident/:id', async (req, res) => {
   }
 });
 
-app.put('/resident/:id', async (req, res) => {
+app.put('/resident/:sequenceId', async (req, res) => {
   try {
-    const result = await resident.update(req.params.id, req.body);
+    const result = await resident.update(req.params.sequenceId, req.body);
     if (!result) return res.status(404).json({ error: 'Residente não encontrado' });
+    console.log(`\n[Resident] ✏️  Residente #${req.params.sequenceId} atualizado`);
     res.json(result);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
 
-app.delete('/resident/:id', async (req, res) => {
+app.delete('/resident/:sequenceId', async (req, res) => {
   try {
-    const result = await resident.remove(req.params.id);
+    const result = await resident.remove(req.params.sequenceId);
     if (!result) return res.status(404).json({ error: 'Residente não encontrado' });
+    console.log(`\n[Resident] 🗑️  Residente #${req.params.sequenceId} removido`);
     res.json({ message: 'Residente removido' });
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -54,5 +57,5 @@ app.delete('/resident/:id', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`[Resident Service] Rodando na porta ${PORT}`);
+  console.log(`\n👤 [Resident Service] Rodando na porta ${PORT}`);
 });

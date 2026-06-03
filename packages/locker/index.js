@@ -14,28 +14,28 @@ async function findAll() {
   return Locker.find();
 }
 
-async function findById(id) {
-  return Locker.findById(id);
+async function findBySequenceId(sequenceId) {
+  return Locker.findOne({ sequenceId });
 }
 
-async function update(id, data) {
-  return Locker.findByIdAndUpdate(id, data, { new: true });
+async function update(sequenceId, data) {
+  return Locker.findOneAndUpdate({ sequenceId }, data, { returnDocument: 'after' });
 }
 
-async function remove(id) {
-  return Locker.findByIdAndDelete(id);
+async function remove(sequenceId) {
+  return Locker.findOneAndDelete({ sequenceId });
 }
 
-async function occupy(id) {
-  return Locker.findByIdAndUpdate(id, { status: 'occupied' }, { new: true });
+async function occupy(sequenceId) {
+  return Locker.findOneAndUpdate({ sequenceId }, { status: 'occupied' }, { returnDocument: 'after' });
 }
 
-async function release(id) {
-  return Locker.findByIdAndUpdate(id, { status: 'empty' }, { new: true });
+async function release(sequenceId) {
+  return Locker.findOneAndUpdate({ sequenceId }, { status: 'empty' }, { returnDocument: 'after' });
 }
 
 async function findAvailable(capacity) {
   return Locker.find({ capacity, status: 'empty' });
 }
 
-module.exports = { lockerSchema, init, create, findAll, findById, update, remove, occupy, release, findAvailable };
+module.exports = { lockerSchema, init, create, findAll, findBySequenceId, update, remove, occupy, release, findAvailable };

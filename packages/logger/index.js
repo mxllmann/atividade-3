@@ -14,16 +14,12 @@ async function findAll() {
   return Logger.find();
 }
 
-async function findById(id) {
-  return Logger.findById(id);
-}
-
 async function findByDeliveryId(deliveryId) {
   return Logger.find({ deliveryId });
 }
 
-async function remove(id) {
-  return Logger.findByIdAndDelete(id);
+async function remove(deliveryId) {
+  return Logger.findOneAndDelete({ deliveryId });
 }
 
-module.exports = { loggerSchema, init, create, findAll, findById, findByDeliveryId, remove };
+module.exports = { loggerSchema, init, create, findAll, findByDeliveryId, remove };

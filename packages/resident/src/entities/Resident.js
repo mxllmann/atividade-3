@@ -15,8 +15,9 @@ const residentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  location: {
+  condominium: {
     type: String,
+    enum: ['A', 'B', 'C'],
     required: true,
   },
 }, { timestamps: true });

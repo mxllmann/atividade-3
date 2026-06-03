@@ -14,20 +14,20 @@ async function findAll() {
   return Resident.find();
 }
 
-async function findById(id) {
-  return Resident.findById(id);
+async function findBySequenceId(sequenceId) {
+  return Resident.findOne({ sequenceId });
 }
 
 async function findByCpf(cpf) {
   return Resident.findOne({ cpf });
 }
 
-async function update(id, data) {
-  return Resident.findByIdAndUpdate(id, data, { new: true });
+async function update(sequenceId, data) {
+  return Resident.findOneAndUpdate({ sequenceId }, data, { returnDocument: 'after' });
 }
 
-async function remove(id) {
-  return Resident.findByIdAndDelete(id);
+async function remove(sequenceId) {
+  return Resident.findOneAndDelete({ sequenceId });
 }
 
-module.exports = { residentSchema, init, create, findAll, findById, findByCpf, update, remove };
+module.exports = { residentSchema, init, create, findAll, findBySequenceId, findByCpf, update, remove };

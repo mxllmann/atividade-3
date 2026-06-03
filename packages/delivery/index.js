@@ -14,10 +14,6 @@ async function findAll() {
   return Delivery.find();
 }
 
-async function findById(id) {
-  return Delivery.findById(id);
-}
-
 async function findBySequenceId(sequenceId) {
   return Delivery.findOne({ sequenceId });
 }
@@ -26,12 +22,12 @@ async function findByResidentId(residentId) {
   return Delivery.find({ residentId });
 }
 
-async function update(id, data) {
-  return Delivery.findByIdAndUpdate(id, data, { new: true });
+async function update(sequenceId, data) {
+  return Delivery.findOneAndUpdate({ sequenceId }, data, { returnDocument: 'after' });
 }
 
-async function withdraw(id) {
-  return Delivery.findByIdAndUpdate(id, { status: 'withdrawn' }, { new: true });
+async function withdraw(sequenceId) {
+  return Delivery.findOneAndUpdate({ sequenceId }, { status: 'withdrawn' }, { returnDocument: 'after' });
 }
 
-module.exports = { deliverySchema, init, create, findAll, findById, findBySequenceId, findByResidentId, update, withdraw };
+module.exports = { deliverySchema, init, create, findAll, findBySequenceId, findByResidentId, update, withdraw };
