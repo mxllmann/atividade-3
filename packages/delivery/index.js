@@ -22,4 +22,16 @@ async function findBySequenceId(sequenceId) {
   return Delivery.findOne({ sequenceId });
 }
 
-module.exports = { deliverySchema, init, create, findAll, findById, findBySequenceId };
+async function findByResidentId(residentId) {
+  return Delivery.find({ residentId });
+}
+
+async function update(id, data) {
+  return Delivery.findByIdAndUpdate(id, data, { new: true });
+}
+
+async function withdraw(id) {
+  return Delivery.findByIdAndUpdate(id, { status: 'withdrawn' }, { new: true });
+}
+
+module.exports = { deliverySchema, init, create, findAll, findById, findBySequenceId, findByResidentId, update, withdraw };

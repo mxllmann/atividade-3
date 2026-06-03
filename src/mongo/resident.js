@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { residentSchema } = require('../../packages/resident/src');
+const { residentSchema } = require('../../packages/resident');
 
 const MONGO_URI = process.env.RESIDENT_MONGO_URI || 'mongodb://localhost:27017/resident_db';
 

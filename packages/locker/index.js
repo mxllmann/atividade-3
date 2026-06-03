@@ -18,10 +18,6 @@ async function findById(id) {
   return Locker.findById(id);
 }
 
-async function occupy(id) {
-  return Locker.findByIdAndUpdate(id, { status: 'occupied' }, { new: true });
-}
-
 async function update(id, data) {
   return Locker.findByIdAndUpdate(id, data, { new: true });
 }

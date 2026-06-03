@@ -6,9 +6,13 @@ const lockerSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  location: {
+    type: String,
+    required: true,
+  },
   capacity: {
     type: String,
-    enum: ['P', 'M', 'GG'],
+    enum: ['P', 'M', 'G', 'XG'],
     required: true,
   },
   status: {

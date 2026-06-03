@@ -1,5 +1,4 @@
 const express = require('express');
-const router = express.Router();
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const app = express();
@@ -13,7 +12,7 @@ const loggerServiceUrl = "http://localhost:3004";
 app.use('/locker', createProxyMiddleware({ target: lockerServiceUrl }));
 app.use('/delivery', createProxyMiddleware({ target: deliveryServiceUrl }));
 app.use('/resident', createProxyMiddleware({ target: residentServiceUrl }));
-app.use('/logger', createProxyMiddleware({ target: loggerServiceUrl }));
+app.use('/log', createProxyMiddleware({ target: loggerServiceUrl }));
 
 app.listen(PORT, () => {
   console.log(`Gateway rodando na porta ${PORT}`);

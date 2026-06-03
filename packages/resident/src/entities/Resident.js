@@ -15,6 +15,10 @@ const residentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  lockerId: {
+    type: String,
+    required: true,
+  },
 }, { timestamps: true });
 
 module.exports = residentSchema;

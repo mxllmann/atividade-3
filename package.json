@@ -4,7 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": ""
+    "start": "node src/gateway/gateway.js & node src/locker/locker.js & node src/delivery/delivery.js & node src/resident/resident.js & node src/logger/logger.js & node src/locker-control/locker-control.js",
+    "start:gateway": "node src/gateway/gateway.js",
+    "start:locker": "node src/locker/locker.js",
+    "start:delivery": "node src/delivery/delivery.js",
+    "start:resident": "node src/resident/resident.js",
+    "start:logger": "node src/logger/logger.js",
+    "start:locker-control": "node src/locker-control/locker-control.js"
   },
   "author": "",
   "license": "ISC",
