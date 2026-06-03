@@ -22,4 +22,12 @@ async function findByCpf(cpf) {
   return Resident.findOne({ cpf });
 }
 
-module.exports = { residentSchema, init, create, findAll, findById, findByCpf };
+async function update(id, data) {
+  return Resident.findByIdAndUpdate(id, data, { new: true });
+}
+
+async function remove(id) {
+  return Resident.findByIdAndDelete(id);
+}
+
+module.exports = { residentSchema, init, create, findAll, findById, findByCpf, update, remove };

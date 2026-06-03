@@ -23,6 +23,15 @@ app.get('/locker/all', async (_req, res) => {
   res.json(result);
 });
 
+app.get('/locker/available/:capacity', async (req, res) => {
+  try {
+    const result = await locker.findAvailable(req.params.capacity);
+    res.json(result);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
 app.get('/locker/:id', async (req, res) => {
   try {
     const result = await locker.findById(req.params.id);

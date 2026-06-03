@@ -34,4 +34,8 @@ async function release(id) {
   return Locker.findByIdAndUpdate(id, { status: 'empty' }, { new: true });
 }
 
-module.exports = { lockerSchema, init, create, findAll, findById, update, remove, occupy, release };
+async function findAvailable(capacity) {
+  return Locker.find({ capacity, status: 'empty' });
+}
+
+module.exports = { lockerSchema, init, create, findAll, findById, update, remove, occupy, release, findAvailable };

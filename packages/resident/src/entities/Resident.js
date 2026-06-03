@@ -15,7 +15,7 @@ const residentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  lockerId: {
+  location: {
     type: String,
     required: true,
   },

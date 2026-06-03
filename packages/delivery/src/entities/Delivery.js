@@ -17,7 +17,7 @@ const deliverySchema = new mongoose.Schema({
   status: {
     type: String,
     enum: ['delivered', 'withdrawn'],
-    default: 'pending',
+    default: 'delivered',
   },
 }, { timestamps: true });
 
